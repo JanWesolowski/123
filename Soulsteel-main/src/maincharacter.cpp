@@ -3,11 +3,13 @@
 //
 
 #include "maincharacter.h"
+#include "AudioPlayer.h"
 
 
 void maincharacter::update(languagestates &languagestates, maincharactermodus &maincharactermodus, difficultylevel &difficultylevel) {
 
     //souldash
+
 
     if(IsKeyPressed(KEY_I)){
         souldash++;
@@ -62,8 +64,6 @@ void maincharacter::update(languagestates &languagestates, maincharactermodus &m
             //switch mode
             if (IsKeyPressed(KEY_SPACE)) {
                 maincharactermodus = soul;
-                 // Odtwarzanie dźwięku
-                player.play();
             }
 
             //movement

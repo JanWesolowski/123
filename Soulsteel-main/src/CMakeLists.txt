@@ -31,6 +31,8 @@ add_executable(${PROJECT_NAME} main.cpp
         ingameoptions.h
         assestmanagergraphics.cpp
         assestmanagergraphics.h
+        AudioPlayer.h
+        AudioPlayer.cpp
 )
 
 # Add config.h.in file

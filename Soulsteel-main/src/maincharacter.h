@@ -11,6 +11,7 @@
 #include "difficultysettings.h"
 #include <iostream>
 #include "assestmanagergraphics.h"
+
 class maincharacter {
 private:
     Texture2D characterSoulTexture = assestmanagergraphics::getTexture("characters/soul/Soul_front");

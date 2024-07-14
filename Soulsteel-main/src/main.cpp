@@ -1,9 +1,11 @@
 ﻿#include <cstdlib>
 #include <algorithm>
+#include <iostream>
 
 #include "raylib.h"
 
 #include "config.h"
+#include "stdlib.h"
 #include "mainmenu.h"
 #include "globalstates.h"
 #include "languagesettings.h"
@@ -18,6 +20,8 @@
 #include "difficultysettings.h"
 #include "ingameoptions.h"
 #include "assestmanagergraphics.h"
+#include "AudioPlayer.h"
+
 
 
 int main() {
@@ -26,6 +30,7 @@ int main() {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
     InitWindow(Game::ScreenWidth, Game::ScreenHeight, "Soul Steel");
     SetTargetFPS(60);
+    InitAudioDevice();
 
 #ifdef GAME_START_FULLSCREEN
     ToggleFullscreen();
@@ -51,6 +56,8 @@ int main() {
 
     difficultylevel difficultylevel =guided;
 
+
+
     //create objects of the classes
     mainmenu mainmenu;
     optionen optionen;
@@ -59,13 +66,31 @@ int main() {
     journal journal;
     maincharacter maincharacter;
     class ingameoptions ingameoptions1;
+    SoundManager soundManager;
+
+    std::vector<std::string> filenames = {
+            "assets/audio/sfx/filenames.wav"
+    };
+    if (!soundManager.loadSounds(filenames))
+    {
+        printf("nie zaladowano plikow");
+        return 1;
+    }
+
+    if (!soundManager.loadBackgroundMusic("assets/audio/sfx/filename.mp3")) {
+        printf("Nie udało się załadować muzyki tła.\n");
+        CloseWindow();
+        return 1;
+    }
+
+    soundManager.playBackgroundMusic();
+
 
 
 
 
     //SetWindowSize(GetMonitorWidth(GetCurrentMonitor()), GetMonitorHeight(GetCurrentMonitor()));
     //ToggleFullscreen();
-
     // Main game loop
     while (!WindowShouldClose()) // Detect window close button or ESC key
     {
@@ -78,7 +103,6 @@ int main() {
                 ToggleFullscreen();
             }
         }
-
         //checks which screen is shown and calls the methods needed there
         switch (state) {
             case menu:
@@ -151,6 +175,13 @@ int main() {
                        {}, 0, WHITE);
         EndDrawing();
 
+        //Audio section
+        soundManager.updateBackgroundMusic();
+        if (IsKeyDown(KEY_SPACE)) {
+            soundManager.playSound(0);
+
+        }
+
     } // Main game loop end
 
     // De-initialization here
@@ -158,7 +189,7 @@ int main() {
     // Close window and OpenGL context
     CloseWindow();
 
-    //CloseAudioDevice();
+    CloseAudioDevice();
 
     return EXIT_SUCCESS;
 }
